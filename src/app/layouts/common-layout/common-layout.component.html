@@ -1,0 +1,76 @@
+<nz-layout class="app-layout">
+  <nz-sider class="menu-sidebar"
+    nzCollapsible
+    nzWidth="256px"
+    nzBreakpoint="md"
+    [(nzCollapsed)]="isCollapsed"
+    [nzTrigger]="null">
+    <div class="sidebar-logo">
+      <a href="https://ng.ant.design/" target="_blank">
+        <img src="https://ng.ant.design/assets/img/logo.svg" alt="logo">
+        <h1>Ant Design Of Angular</h1>
+      </a>
+    </div>
+    <ul nz-menu nzTheme="dark" nzMode="inline"><!-- atributo: [nzInlineCollapsed]="isCollapsed" -->
+      @for (item of menuItems; track item) {   
+        <li nz-submenu [nzOpen]="item.pathCurrents" [nzTitle]="item.title" [nzIcon]="item.iconType"><!-- ngFor -->
+          <ul>
+            @for (subItem of item.submenu; track subItem) {
+              <li nz-menu-item nzMatchRouter><!-- ngFor -->
+                <a [routerLink]="subItem.path">{{subItem.title}}</a>
+              </li>
+            }
+          </ul>
+        </li>
+      }
+    </ul>
+  </nz-sider>
+  
+  <nz-layout>
+    <nz-header>
+      <div class="app-header">
+        <!-- =================== Boton de colapse ====================== -->
+        <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
+          <span class="trigger"
+              nz-icon
+              [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
+          ></span>
+        </span>
+
+        <!-- =================== Opciones ================= -->
+        <div class="options">
+          <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="profile">
+            <span>Usuario logueado</span>
+            <span nz-icon nzType="down" nzTheme="outline"></span>
+          </a>
+
+          <!-- ================ dropdown ================ -->
+          <nz-dropdown-menu #profile="nzDropdownMenu">
+            <ul nz-menu>
+              <div class="item">
+                <h6>Nombre de Usuario</h6>
+                <p>Rol del Usuario</p>
+              </div>
+              
+              <li nz-menu-item class="li-hover"><!-- (click)="logout()" -->
+                <div class="logout">
+                  <span nz-icon nzType="logout" nzTheme="outline"></span>
+                  <span>Cerrar Sesion</span>
+                </div>
+              </li>
+            </ul>
+          </nz-dropdown-menu>
+        </div>
+      </div>
+    </nz-header>
+    
+    <nz-content>
+      <div class="inner-content">
+        <div>
+          <h3 *ngIf="title$ | async; let title">{{(title[title.length - 1].label)}}</h3>
+        </div>
+        <router-outlet></router-outlet>
+      </div>
+    </nz-content>
+  </nz-layout>
+</nz-layout>
